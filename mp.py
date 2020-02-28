@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 
 import argparse
 import getch
@@ -8,6 +8,7 @@ import os
 import pathlib
 import pyperclip as clipboard
 import sys
+import webbrowser
 
 from pbe_with_md5_and_triple_des import PBEWithMD5AndTripleDES
 
@@ -61,14 +62,11 @@ def main():
             exit()
         
         secret = secrets[int(c)]
-        print('  ' + secret['name'] + ' | ' + secret['login'] + ' | ' + secret['email'] + ' | ' + secret['path'])
-        clipboard.copy(cipher.decrypt(secrets[int(c)]['encryptedPassword'], password))
-        
-    # plain_text = 'Hello World!'
-    # cipher = PBEWithMD5AndTripleDES()
-    # encrypted_text = cipher.encrypt(plain_text, password)
-    # decrypted_text = cipher.decrypt(encrypted_text, password)
-    # assert plain_text == decrypted_text
+        path = secret['path']
+        print('  ' + secret['name'] + ' | ' + secret['login'] + ' | ' + secret['email'] + ' | ' + path)
+        if path.lower().startswith('http'):
+            webbrowser.open(secret['path'])
+        clipboard.copy(cipher.decrypt(secrets[int(c)]['encryptedPassword'], password))        
 
 
 if __name__ == "__main__":
